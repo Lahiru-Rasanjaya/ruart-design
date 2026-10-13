@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-brand-black antialiased;
+    overflow-x: hidden;
+  }
+
+  img {
+    @apply select-none;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-red;
+    outline-style: solid;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md px-5 text-sm font-semibold transition-colors duration-200;
+  }
+
+  .btn-red {
+    @apply btn bg-brand-red text-white hover:bg-brand-red-dark;
+  }
+
+  .btn-outline {
+    @apply btn border border-brand-black bg-white text-brand-black hover:bg-brand-black hover:text-white;
+  }
+
+  .section-eyebrow {
+    @apply mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-red;
+  }
+
+  .section-title {
+    @apply text-2xl font-extrabold tracking-tight text-brand-black sm:text-3xl;
+  }
+}
