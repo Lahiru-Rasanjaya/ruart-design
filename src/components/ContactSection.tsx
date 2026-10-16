@@ -10,9 +10,9 @@ export default function ContactSection() {
   const facebook = siteConfig.socialLinks.find((s) => s.label.toLowerCase() === 'facebook');
 
   return (
-    <section id="contact" className="py-12 bg-brand-grey sm:py-16" aria-labelledby="contact-title">
+    <section id="contact" className="bg-brand-grey py-12 sm:py-16" aria-labelledby="contact-title">
       <div className="container-page">
-        <div className="flex flex-col items-center max-w-2xl px-5 py-8 mx-auto text-center bg-white border rounded-lg border-brand-line shadow-card sm:px-10 sm:py-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center rounded-lg border border-brand-line bg-white px-5 py-8 text-center shadow-card sm:px-10 sm:py-10">
           <img
             src={assetUrl(siteConfig.logo)}
             alt={`${siteConfig.name} logo`}
@@ -21,7 +21,7 @@ export default function ContactSection() {
             loading="lazy"
             className="h-auto w-44 sm:w-52"
           />
-          <p className="mt-6 section-eyebrow">Contact</p>
+          <p className="section-eyebrow mt-6">Contact</p>
           <h2 id="contact-title" className="section-title">
             Let's talk on WhatsApp
           </h2>
@@ -35,13 +35,13 @@ export default function ContactSection() {
             rel="noopener noreferrer"
             className="btn-red mt-6 w-full sm:w-auto sm:min-w-[14rem]"
           >
-            <WhatsAppIcon className="w-5 h-5" />
+            <WhatsAppIcon className="h-5 w-5" />
             Chat on WhatsApp
           </a>
           <p className="mt-3 text-sm font-medium text-brand-black/70">{siteConfig.whatsappDisplay}</p>
 
           {(siteConfig.email || facebook) && (
-            <ul className="flex items-center justify-center gap-3 mt-5" aria-label="More ways to contact RUart DESIGN">
+            <ul className="mt-5 flex items-center justify-center gap-3" aria-label="More ways to contact RUart DESIGN">
               {siteConfig.email && (
                 <li>
                   <a
@@ -50,7 +50,7 @@ export default function ContactSection() {
                     title={siteConfig.email}
                     className={iconBtn}
                   >
-                    <MailIcon className="w-5 h-5" />
+                    <MailIcon className="h-5 w-5" />
                   </a>
                 </li>
               )}
@@ -64,7 +64,7 @@ export default function ContactSection() {
                     title="Facebook"
                     className={iconBtn}
                   >
-                    <FacebookIcon className="w-5 h-5" />
+                    <FacebookIcon className="h-5 w-5" />
                   </a>
                 </li>
               )}

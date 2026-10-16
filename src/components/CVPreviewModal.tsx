@@ -1,17 +1,19 @@
 import { useEffect, useRef } from 'react';
-import type { CVTemplate } from '../data/types';
+import type { DesignItem } from '../data/types';
 import { assetUrl } from '../utils/assets';
 import { buildOrderLink, formatPrice } from '../utils/whatsapp';
 import WhatsAppIcon from './WhatsAppIcon';
 
 interface Props {
-  cv: CVTemplate | null;
+  cv: DesignItem | null;
+  /** "CV", "Tute", "Post" or "Logo". */
+  label?: string;
   onClose: () => void;
 }
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export default function CVPreviewModal({ cv, onClose }: Props) {
+export default function CVPreviewModal({ cv, label = 'CV', onClose }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -81,7 +83,7 @@ export default function CVPreviewModal({ cv, onClose }: Props) {
         <div className="flex items-center justify-center bg-brand-grey p-4 md:max-h-[calc(100dvh-1.5rem)]">
           <img
             src={assetUrl(cv.image)}
-            alt={`${cv.name} CV design preview, ${cv.id}`}
+            alt={`${cv.name} ${label} design preview, ${cv.id}`}
             width={420}
             height={594}
             className="h-auto max-h-[46dvh] w-auto max-w-full border border-brand-line bg-white object-contain shadow-card md:max-h-[calc(100dvh-4.5rem)]"
@@ -101,13 +103,13 @@ export default function CVPreviewModal({ cv, onClose }: Props) {
             </p>
           )}
           <a
-            href={buildOrderLink(cv)}
+            href={buildOrderLink(cv, label)}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-red mt-3 w-full"
           >
             <WhatsAppIcon className="h-5 w-5" />
-            Order This CV on WhatsApp
+            Order This {label} on WhatsApp
           </a>
           <p className="text-center text-xs text-brand-black/55">
             Opens WhatsApp with your message ready to send.

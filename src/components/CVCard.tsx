@@ -1,13 +1,20 @@
-import type { CVTemplate } from '../data/types';
+import type { DesignItem } from '../data/types';
 import { assetUrl } from '../utils/assets';
 import { buildOrderLink, formatPrice } from '../utils/whatsapp';
 
 interface Props {
-  cv: CVTemplate;
-  onPreview: (cv: CVTemplate) => void;
+  cv: DesignItem;
+  /** "CV", "Tute", "Post" or "Logo". */
+  label?: string;
+  /** Preview shape: "210 / 297" (A4 portrait, default) or "1 / 1" (square). */
+  aspect?: string;
+  onPreview: (cv: DesignItem) => void;
 }
 
-export default function CVCard({ cv, onPreview }: Props) {
+export default function CVCard({ cv, label = 'CV', aspect = '210 / 297', onPreview }: Props) {
+  const [aw, ah] = aspect.split('/').map((n) => Number(n.trim()));
+  const imgHeight = Math.round((420 * ah) / aw);
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-lg border border-brand-line bg-white shadow-card transition-shadow duration-200 hover:shadow-lift">
       <button
@@ -18,12 +25,13 @@ export default function CVCard({ cv, onPreview }: Props) {
       >
         <img
           src={assetUrl(cv.image)}
-          alt={`${cv.name} CV design preview, ${cv.id}`}
+          alt={`${cv.name} ${label} design preview, ${cv.id}`}
           width={420}
-          height={594}
+          height={imgHeight}
           loading="lazy"
           decoding="async"
-          className="mx-auto block aspect-[210/297] w-full border border-brand-line bg-white object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+          style={{ aspectRatio: aspect }}
+          className="mx-auto block w-full border border-brand-line bg-white object-contain transition-transform duration-300 group-hover:scale-[1.02]"
         />
         {cv.placeholder && (
           <span className="absolute left-3 top-3 rounded-sm bg-brand-black/85 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white sm:left-4 sm:top-4">
@@ -40,14 +48,14 @@ export default function CVCard({ cv, onPreview }: Props) {
         <h3 className="text-sm font-bold leading-snug sm:text-base">{cv.name}</h3>
         <p className="text-sm font-semibold text-brand-black/80">{formatPrice(cv.price)}</p>
         <a
-          href={buildOrderLink(cv)}
+          href={buildOrderLink(cv, label)}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Order ${cv.name} (${cv.id}) on WhatsApp`}
           className="btn-red mt-3 w-full !px-3 text-[13px] sm:text-sm"
           data-cv-id={cv.id}
         >
-          Order This CV
+          Order This {label}
         </a>
       </div>
     </article>

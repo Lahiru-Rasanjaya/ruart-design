@@ -14,7 +14,7 @@ export const services: ServiceCategory[] = [
     title: 'CV Designs',
     description: 'Professional CV and resume templates. Choose one and order on WhatsApp.',
     status: 'active',
-    href: '#cv-designs',
+    href: '#designs',
   },
   {
     id: 'social-media',

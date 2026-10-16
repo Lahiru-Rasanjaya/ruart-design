@@ -1,19 +1,24 @@
-import { cvTemplates } from '../data/cvTemplates';
+import { designCategories } from '../data/categories';
+import type { DesignItem } from '../data/types';
 import { assetUrl } from '../utils/assets';
 import { buildGeneralOrderLink } from '../utils/whatsapp';
 
+/** The featured design of a category (or its first one) for the hero collage. */
+function pick(categoryId: string): { item: DesignItem; label: string } | undefined {
+  const cat = designCategories.find((c) => c.id === categoryId);
+  const item = cat?.items.find((i) => i.featured) ?? cat?.items[0];
+  return cat && item ? { item, label: cat.itemLabel } : undefined;
+}
+
 export default function HeroSection() {
-  // Hero uses featured designs first, then fills up from the rest of the list.
-  const featured = cvTemplates.filter((t) => t.featured);
-  const rest = cvTemplates.filter((t) => !t.featured);
-  const previews = [...featured, ...rest].slice(0, 3);
-  const showsPlaceholders = previews.some((p) => p.placeholder);
+  const cv = pick('cv');
+  const logo = pick('logo');
+  const post = pick('post');
+  const banner = pick('banner');
 
-  // left card, centre card, right card
-  const [left, centre, right] = previews;
+  const showsPlaceholders = [cv, logo, post, banner].some((p) => p?.item.placeholder);
 
-  const frame =
-    'absolute overflow-hidden rounded-[4px] border border-brand-line bg-white shadow-lift aspect-[210/297]';
+  const frame = 'absolute overflow-hidden rounded-[4px] border border-brand-line bg-white shadow-lift';
 
   return (
     <section id="home" className="relative overflow-hidden bg-white">
@@ -24,15 +29,15 @@ export default function HeroSection() {
         <div className="animate-fade-up">
           <p className="section-eyebrow">Graphic design · Sri Lanka</p>
           <h1 className="text-[1.75rem] font-extrabold leading-[1.12] tracking-tight sm:text-4xl lg:text-5xl">
-            Professional CV Designs That Make You <span className="text-brand-red">Stand Out</span>
+            Professional Designs That Make You <span className="text-brand-red">Stand Out</span>
           </h1>
           <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-brand-black/75 sm:text-base">
-            Find a CV design that matches your style and career goals. Choose your favourite template and order
-            directly through WhatsApp.
+            Find a design that matches your style and goals. Choose your favourite and order directly through
+            WhatsApp.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <a href="#cv-designs" className="btn-red sm:min-w-[11rem]">
-              Explore CV Designs
+            <a href="#services" className="btn-red sm:min-w-[11rem]">
+              Explore Designs
             </a>
             <a
               href={buildGeneralOrderLink()}
@@ -40,49 +45,65 @@ export default function HeroSection() {
               rel="noopener noreferrer"
               className="btn-outline sm:min-w-[11rem]"
             >
-              Order Your CV
+              Order on WhatsApp
             </a>
           </div>
         </div>
 
-        {left && centre && right && (
-          <div className="animate-fade-up [animation-delay:120ms]">
-            <div className="relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
-              <div className={`${frame} left-[2%] top-[12%] w-[35%] -rotate-6`}>
+        {/* Collage: CV, Logo, Post and Banner designs */}
+        <div className="animate-fade-up [animation-delay:120ms]">
+          <div className="relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
+            {cv && (
+              <div className={`${frame} left-[3%] top-[5%] z-10 w-[30%] -rotate-3`} style={{ aspectRatio: '210 / 297' }}>
                 <img
-                  src={assetUrl(left.image)}
-                  alt={`${left.name} CV design preview, ${left.id}`}
+                  src={assetUrl(cv.item.image)}
+                  alt={`${cv.item.name} CV design preview, ${cv.item.id}`}
                   width={420}
                   height={594}
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className={`${frame} right-[2%] top-[12%] w-[35%] rotate-6`}>
+            )}
+            {logo && (
+              <div className={`${frame} left-[37%] top-[11%] z-20 w-[25%]`} style={{ aspectRatio: '1 / 1' }}>
                 <img
-                  src={assetUrl(right.image)}
-                  alt={`${right.name} CV design preview, ${right.id}`}
+                  src={assetUrl(logo.item.image)}
+                  alt={`${logo.item.name} Logo design preview, ${logo.item.id}`}
                   width={420}
-                  height={594}
+                  height={420}
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className={`${frame} left-1/2 top-0 z-10 w-[41%] -translate-x-1/2`}>
+            )}
+            {post && (
+              <div className={`${frame} right-[3%] top-[4%] z-10 w-[31%] rotate-3`} style={{ aspectRatio: '1 / 1' }}>
                 <img
-                  src={assetUrl(centre.image)}
-                  alt={`${centre.name} CV design preview, ${centre.id}`}
+                  src={assetUrl(post.item.image)}
+                  alt={`${post.item.name} Post design preview, ${post.item.id}`}
                   width={420}
-                  height={594}
+                  height={420}
                   className="h-full w-full object-cover"
                 />
               </div>
-            </div>
-            {showsPlaceholders && (
-              <p className="mt-2 text-center text-[11px] uppercase tracking-[0.14em] text-brand-black/45">
-                Sample placeholder previews
-              </p>
+            )}
+            {banner && (
+              <div className={`${frame} bottom-[3%] left-[18%] z-30 w-[64%]`} style={{ aspectRatio: '7 / 3' }}>
+                <img
+                  src={assetUrl(banner.item.image)}
+                  alt={`${banner.item.name} Banner design preview, ${banner.item.id}`}
+                  width={840}
+                  height={360}
+                  className="h-full w-full object-cover"
+                />
+              </div>
             )}
           </div>
-        )}
+          {showsPlaceholders && (
+            <p className="mt-2 text-center text-[11px] uppercase tracking-[0.14em] text-brand-black/45">
+              Sample placeholder previews
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

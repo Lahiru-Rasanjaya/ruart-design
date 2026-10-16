@@ -3,12 +3,22 @@ import { navLinks, siteConfig } from '../data/site';
 import { assetUrl } from '../utils/assets';
 import { buildGeneralOrderLink } from '../utils/whatsapp';
 
-export default function Navbar() {
+interface Props {
+  /** true while a service page (CV, Logo ...) is open instead of the home page. */
+  onCategoryPage?: boolean;
+}
+
+export default function Navbar({ onCategoryPage = false }: Props) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>(navLinks[0]?.href ?? '#home');
 
   // Highlights the menu link of the section the visitor is currently viewing.
   useEffect(() => {
+    // On a service page, "Services" is the active menu item.
+    if (onCategoryPage) {
+      setActive('#services');
+      return;
+    }
     const ids = navLinks.map((l) => l.href.slice(1));
     const update = () => {
       const y = window.scrollY + 120;
@@ -28,7 +38,7 @@ export default function Navbar() {
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
     };
-  }, []);
+  }, [onCategoryPage]);
 
   useEffect(() => {
     if (!open) return;
@@ -42,17 +52,17 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-brand-line bg-white/95 backdrop-blur">
       <div className="container-page flex h-14 items-center justify-between md:h-[72px]">
-        <a href="#home" className="flex items-center shrink-0" aria-label={`${siteConfig.name} – home`}>
+        <a href="#home" className="flex shrink-0 items-center" aria-label={`${siteConfig.name} – home`}>
           <img
             src={assetUrl(siteConfig.logoCompact)}
             alt={`${siteConfig.name} logo`}
             width={900}
             height={489}
-            className="w-auto h-10 md:h-14"
+            className="h-10 w-auto md:h-14"
           />
         </a>
 
-        <nav aria-label="Main navigation" className="items-center hidden gap-8 md:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -90,9 +100,9 @@ export default function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="flex items-center justify-center rounded-md h-11 w-11 text-brand-black hover:bg-brand-grey"
+            className="flex h-11 w-11 items-center justify-center rounded-md text-brand-black hover:bg-brand-grey"
           >
-            <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               {open ? (
                 <path d="M6 6l12 12M18 6L6 18" />
               ) : (
@@ -107,9 +117,9 @@ export default function Navbar() {
         <nav
           id="mobile-menu"
           aria-label="Mobile navigation"
-          className="bg-white border-t animate-fade-in border-brand-line md:hidden"
+          className="animate-fade-in border-t border-brand-line bg-white md:hidden"
         >
-          <ul className="py-2 container-page">
+          <ul className="container-page py-2">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a

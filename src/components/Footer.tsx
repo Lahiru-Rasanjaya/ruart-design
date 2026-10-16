@@ -21,7 +21,7 @@ export default function Footer() {
           className="w-32 h-auto sm:w-40"
         />
 
-        <ul className="flex items-center justify-center gap-3 mt-5" aria-label="Contact RUart DESIGN">
+        <ul className="flex items-center gap-3 pt-4" aria-label="Contact RUart DESIGN">
           <li>
             <a
               href={buildContactLink()}
